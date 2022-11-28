@@ -52,18 +52,21 @@ async function run() {
             res.send(result);
         });
 
+        // save user info in db
         app.post("/users", async (req, res) => {
             const query = req.body;
             const result = await usersCollection.insertOne(query);
             res.send(result);
         });
 
+        // get user info
         app.get('/users', async (req, res) => {
             const query = {};
             const users = await usersCollection.find(query).toArray();
             res.send(users);
         });
 
+        // get user info with role
         app.get('/users/admin/:id', async (req, res) => {
             const email = req.params.id;
             const query = { email };
@@ -71,6 +74,7 @@ async function run() {
             res.send({ isAdmin: user?.role === 'admin' });
         });
 
+        // update user role
         app.put('/users/admin/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) }
@@ -84,12 +88,14 @@ async function run() {
             res.send(result);
         });
 
+        // post a booking in client side
         app.post("/bookings", async (req, res) => {
             const query = req.body;
             const result = await bookingsCollection.insertOne(query);
             res.send(result);
         });
 
+        // get the bookings with email
         app.get('/bookings/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
@@ -97,6 +103,7 @@ async function run() {
             res.send(result);
         })
 
+        // get the products in db
         app.get('/products', async (req, res) => {
             const email = req.query.email;
             const query = { email: email };
@@ -104,18 +111,21 @@ async function run() {
             res.send(result);
         })
 
+        // get all the products in db
         app.get('/allproducts', async (req, res) => {
             const query = {};
             const result = await productCollection.find(query).toArray();
             res.send(result);
         })
 
+        // post adverstainment in client side
         app.post("/adverstainment", async (req, res) => {
             const query = req.body;
             const result = await adverstainmentCollection.insertOne(query);
             res.send(result);
         });
 
+        // get the adverstainment product
         app.get('/adverstainment', async (req, res) => {
             const query = {};
             const users = await adverstainmentCollection.find(query).toArray();
