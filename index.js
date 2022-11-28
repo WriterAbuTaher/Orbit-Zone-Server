@@ -22,12 +22,14 @@ async function run() {
         const bookingsCollection = client.db('orbitZone').collection('bookings');
         const adverstainmentCollection = client.db('orbitZone').collection('adverstainment');
 
+        // get the categories
         app.get('/categories', async (req, res) => {
             const query = {};
             const categories = await categoriesCollection.find(query).toArray();
             res.send(categories);
         })
 
+        // get categories with id
         app.get('/categories/:id', async (req, res) => {
             const id = req.params.id;
             const query = { category_id: id };
@@ -35,6 +37,7 @@ async function run() {
             res.send(result);
         })
 
+        // get products with id
         app.get('/products/:id', async (req, res) => {
             const id = req.params.id;
             const query = { category_id: id };
@@ -42,6 +45,7 @@ async function run() {
             res.send(result);
         })
 
+        // post product from client side
         app.post("/products", async (req, res) => {
             const query = req.body;
             const result = await productCollection.insertOne(query);
