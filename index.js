@@ -12,6 +12,7 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.DB_USER_NAME}:${process.env.DB_USER_PASS}@cluster0.v7xheu4.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+
 async function run() {
     try {
 
@@ -35,7 +36,6 @@ async function run() {
 
         app.get('/products/:id', async (req, res) => {
             const id = req.params.id;
-            console.log(id);
             const query = { category_id: id };
             const result = await productCollection.find(query).toArray();
             res.send(result);
@@ -57,6 +57,26 @@ async function run() {
             const query = {};
             const users = await usersCollection.find(query).toArray();
             res.send(users);
+        });
+
+        app.get('/users/admin/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId };
+            const users = await usersCollection.findOne(query)
+            res.send({ isAdmin: user?.role === 'admin' });
+        });
+
+        app.put('/users/admin/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    role: 'admin'
+                }
+            }
+            const result = await usersCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
         });
 
         app.post("/bookings", async (req, res) => {
