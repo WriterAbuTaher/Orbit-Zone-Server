@@ -100,6 +100,12 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/allproducts', async (req, res) => {
+            const query = {};
+            const result = await productCollection.find(query).toArray();
+            res.send(result);
+        })
+
         app.post("/adverstainment", async (req, res) => {
             const query = req.body;
             const result = await adverstainmentCollection.insertOne(query);
