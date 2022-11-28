@@ -20,6 +20,7 @@ async function run() {
         const productCollection = client.db('orbitZone').collection('products');
         const usersCollection = client.db('orbitZone').collection('users');
         const bookingsCollection = client.db('orbitZone').collection('bookings');
+        const adverstainmentCollection = client.db('orbitZone').collection('adverstainment');
 
         app.get('/categories', async (req, res) => {
             const query = {};
@@ -92,6 +93,24 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/products', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const result = await productCollection.find(query).toArray();
+            res.send(result);
+        })
+
+        app.post("/adverstainment", async (req, res) => {
+            const query = req.body;
+            const result = await adverstainmentCollection.insertOne(query);
+            res.send(result);
+        });
+
+        app.get('/adverstainment', async (req, res) => {
+            const query = {};
+            const users = await adverstainmentCollection.find(query).toArray();
+            res.send(users);
+        });
     }
 
     finally {
